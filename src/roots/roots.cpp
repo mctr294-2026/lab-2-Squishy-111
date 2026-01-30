@@ -46,14 +46,16 @@ bool regula_falsi(std::function<double(double)> f,
 
     double c;
     double tolerance = 1e-6;
+    int max_iterations = 1e6;
 
-    while( std::abs(b-a) >= tolerance ){
+    for(int i=0; i <= max_iterations; i++){
         
         //c is the slope
         c = ( a*f(b) - b*f(a) ) / ( f(b) - f(a) );
         
-        if( f(c) == 0.0){
-            break;
+        if( std::abs(b - a) < tolerance ){
+            *root = c;
+            return true;
         }
 
         //checks if f(c) and f(a) are same sign
@@ -63,7 +65,7 @@ bool regula_falsi(std::function<double(double)> f,
             b = c;
         }
 
-    }//while
+    }//for
 
     *root = c;
     return true;
